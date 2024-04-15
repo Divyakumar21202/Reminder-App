@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "627116005190",
+    "project_id": "modx-flutter",
+    "storage_bucket": "modx-flutter.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:627116005190:android:a688a6cb8f7e471df2b747",
+        "android_client_info": {
+          "package_name": "com.example.mobx_flutter"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAd_xV4ZkYl0FqGOLZUjgipsYGrxWqCN4Q"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -1,0 +1,27 @@
+name: mobx_flutter
+description: "A new Flutter project."
+publish_to: 'none'
+version: 0.1.0
+
+environment:
+  sdk: '>=3.4.0-99.1.beta <4.0.0'
+
+dependencies:
+  cloud_firestore: ^4.16.1
+  firebase_auth: ^4.19.1
+  flutter:
+    sdk: flutter
+  flutter_hooks_bloc: ^0.15.0+1
+  flutter_mobx: ^2.0.6+5
+  mobx_architecture: ^3.0.1
+  provider: ^5.0.0
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^3.0.0
+  build_runner: ^2.4.9
+  mobx_codegen: ^2.6.1
+
+flutter:
+  uses-material-design: true
