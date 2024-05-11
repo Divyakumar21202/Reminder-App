@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
 
 enum TextFieldDialogButtonType { cancel, confirm }
 
 typedef TextFieldOptionbuilder<T> = Map<TextFieldDialogButtonType, T?>
     Function();
 
-late final controller = TextEditingController();
+ final controller = useTextEditingController();
 Future<String?> showTextFieldDialog({
   required BuildContext context,
   required String title,
@@ -34,7 +35,7 @@ Future<String?> showTextFieldDialog({
                   break;
                 case TextFieldDialogButtonType.confirm:
                   Navigator.of(context).pop(controller.text);
-                  break; 
+                  break;
               }
             },
             child: e.value);

@@ -166,7 +166,6 @@ abstract class _AppState with Store {
   Future<void> initialization() async {
     isLoading = true;
     currentUser = FirebaseAuth.instance.currentUser;
-
     if (currentUser != null) {
       final collection =
           await FirebaseFirestore.instance.collection(currentUser!.uid).get();
