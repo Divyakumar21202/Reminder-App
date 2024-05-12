@@ -6,7 +6,7 @@ enum TextFieldDialogButtonType { cancel, confirm }
 typedef TextFieldOptionbuilder<T> = Map<TextFieldDialogButtonType, T?>
     Function();
 
- final controller = useTextEditingController();
+final controller = useTextEditingController(text: '');
 Future<String?> showTextFieldDialog({
   required BuildContext context,
   required String title,
@@ -15,7 +15,7 @@ Future<String?> showTextFieldDialog({
 }) {
   controller.clear();
   final options = optionbuilder();
-  return showDialog(
+  return showDialog<String?>(
     context: context,
     builder: (context) => AlertDialog(
       title: Text(title),

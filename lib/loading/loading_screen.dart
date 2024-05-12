@@ -41,9 +41,10 @@ class LoadingScreen {
         child: Center(
           child: Container(
             constraints: BoxConstraints(
-              maxWidth: size.width * 0.8,
-              maxHeight: size.height * 0.8,
-              minWidth: size.width * 0.5,
+              maxWidth: size.width * 0.9,
+              maxHeight: size.height * 0.3,
+              minWidth: size.width * 0.6,
+              minHeight: size.height * 0.2,
             ),
             decoration: BoxDecoration(
               color: Colors.white,
@@ -52,9 +53,10 @@ class LoadingScreen {
               ),
             ),
             child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 const SizedBox(height: 10),
-                const CircleAvatar(),
+                const CircularProgressIndicator(),
                 const SizedBox(height: 20),
                 StreamBuilder(
                   stream: _text.stream,
@@ -65,7 +67,7 @@ class LoadingScreen {
                         textAlign: TextAlign.center,
                       );
                     } else {
-                      return Container();
+                      return const SizedBox();
                     }
                   },
                 )

@@ -200,6 +200,7 @@ abstract class _AppState with Store {
     required String email,
     required String password,
   }) async {
+    isLoading = true;
     try {
       await fn(
         password: password,
@@ -208,6 +209,7 @@ abstract class _AppState with Store {
       await _loadReminders();
       return true;
     } on FirebaseAuthException catch (e) {
+      isLoading = false;
       currentUser = null;
       authError = AuthError.from(e);
       return false;

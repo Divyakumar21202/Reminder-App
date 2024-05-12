@@ -18,7 +18,7 @@ class LoginView extends HookWidget {
     );
     return Scaffold(
       appBar: AppBar(
-        title: Text('Login'),
+        title:const Text('Login'),
         centerTitle: true,
       ),
       body: Padding(
