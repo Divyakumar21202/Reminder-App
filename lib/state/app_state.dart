@@ -106,7 +106,7 @@ abstract class _AppState with Store {
   @action
   Future<bool> addReminder(String text) async {
     isLoading = true;
-    final user = FirebaseAuth.instance.currentUser;
+    final user = currentUser;
     if (user == null) {
       isLoading = false;
       return false;
@@ -141,19 +141,27 @@ abstract class _AppState with Store {
 
   @action
   Future<bool> modify(Reminder rem, {required bool isDone}) async {
-    var userId = currentUser?.uid;
+    var user = currentUser;
 
-    if (userId == null) {
+    if (user == null) {
       return false;
     }
     // update reminder at remote
     try {
+      // update loacally reminder
+      final index = reminder.indexOf(rem);
+      Reminder r = Reminder(
+          id: rem.id,
+          creationDate: rem.creationDate,
+          isDone: isDone,
+          text: rem.text);
+      reminder[index] = r;
       await FirebaseFirestore.instance
-          .collection(userId)
+          .collection(FirebaseAuth.instance.currentUser!.uid)
           .doc(rem.id)
           .update({_DocumentKeys.isDone: isDone});
-      //update loacally reminder
-      reminder.firstWhere((element) => element.id == rem.id).isDone = isDone;
+
+      // reminder.firstWhere((element) => element.id == rem.id).isDone = isDone;
       return true;
     } catch (_) {
       return false;
@@ -167,8 +175,6 @@ abstract class _AppState with Store {
     isLoading = true;
     currentUser = FirebaseAuth.instance.currentUser;
     if (currentUser != null) {
-      final collection =
-          await FirebaseFirestore.instance.collection(currentUser!.uid).get();
       await _loadReminders();
       currentScreen = AppScreen.reminderScreen;
       isLoading = false;
@@ -183,13 +189,16 @@ abstract class _AppState with Store {
     final collection =
         await FirebaseFirestore.instance.collection(currentUser!.uid).get();
     final reminders = collection.docs.map<Reminder>(
-      (e) => Reminder(
-        id: e.id,
-        creationDate: DateTime.parse(e[_DocumentKeys.creationDate] as String),
-        isDone: e[_DocumentKeys.isDone] as bool,
-        text: e[_DocumentKeys.text] as String,
-      ),
-    );
+      (e) {
+        print(e[_DocumentKeys.text]);
+        return Reminder(
+          id: e.id,
+          creationDate: DateTime.now(),
+          isDone: e[_DocumentKeys.isDone] as bool,
+          text: e[_DocumentKeys.text] as String,
+        );
+      },
+    ).toList();
     reminder = ObservableList<Reminder>.of(reminders);
     return true;
   }
@@ -202,10 +211,11 @@ abstract class _AppState with Store {
   }) async {
     isLoading = true;
     try {
-      await fn(
+      final credentials = await fn(
         password: password,
         email: email,
       );
+      currentUser = credentials.user;
       await _loadReminders();
       return true;
     } on FirebaseAuthException catch (e) {

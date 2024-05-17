@@ -35,6 +35,7 @@ class RemindersView extends StatelessWidget {
           const MainPopUpMenuButton()
         ],
       ),
+      body: const RemindersListView(),
     );
   }
 }
@@ -50,38 +51,55 @@ class RemindersListView extends StatelessWidget {
         itemCount: appstate.reminder.length,
         itemBuilder: (context, index) {
           final reminder = appstate.reminder[index];
-          return CheckboxListTile(
-            controlAffinity: ListTileControlAffinity.leading,
-            value: reminder.isDone,
-            onChanged: (isDone) {
-              context.read<AppState>().modify(
+          return Observer(builder: (context) {
+            // return ListTile(
+            //     leading: IconButton(
+            //       onPressed: () {
+            //         appstate.modify(reminder, isDone: !reminder.isDone);
+            //       },
+            //       icon: reminder.isDone
+            //           ? const Icon(Icons.check_box)
+            //           : const Icon(Icons.check_box_outline_blank_outlined),
+            //     ),
+            //     title: Text(
+            //       reminder.text,
+            //       style: const TextStyle(color: Colors.yellow),
+            //     ));
+            return CheckboxListTile(
+              controlAffinity: ListTileControlAffinity.leading,
+              value: reminder.isDone,
+              onChanged: (isDone) async {
+                if (isDone != null) {
+                  appstate.modify(
                     reminder,
-                    isDone: isDone ?? false,
+                    isDone: !reminder.isDone,
                   );
-              reminder.isDone = isDone ?? false;
-            },
-            title: Row(
-              children: [
-                Expanded(
-                  child: Text(
-                    reminder.text,
+                }
+              },
+              title: Row(
+                children: [
+                  Expanded(
+                    child: Text(
+                      reminder.text,
+                      style: const TextStyle(color: Colors.yellow),
+                    ),
                   ),
-                ),
-                IconButton(
-                  onPressed: () async {
-                    final isDelete =
-                        await showDeleteReminderDialog(context: context);
-                    if (isDelete) {
-                      context.read<AppState>().delete(reminder);
-                    }
-                  },
-                  icon: const Icon(
-                    Icons.delete,
-                  ),
-                )
-              ],
-            ),
-          );
+                  IconButton(
+                    onPressed: () async {
+                      final isDelete =
+                          await showDeleteReminderDialog(context: context);
+                      if (isDelete) {
+                        appstate.delete(reminder);
+                      }
+                    },
+                    icon: const Icon(
+                      Icons.delete,
+                    ),
+                  )
+                ],
+              ),
+            );
+          });
         },
       ),
     );

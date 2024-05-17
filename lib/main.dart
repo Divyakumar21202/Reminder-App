@@ -16,8 +16,12 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  runApp(Provider(
-      create: (_) => AppState()..initialization(), child: const MainApp()));
+  runApp(
+    Provider(
+      create: (_) => AppState()..initialization(),
+      child: const MainApp(),
+    ),
+  );
 }
 
 class MainApp extends StatelessWidget {
@@ -28,31 +32,36 @@ class MainApp extends StatelessWidget {
     return MaterialApp(
       theme: ThemeData.dark(),
       debugShowCheckedModeBanner: false,
-      home: ReactionBuilder(builder: (context) {
-        return autorun((_) {
-          final isLoading = context.read<AppState>().isLoading;
-          if (isLoading) {
-            LoadingScreen.instance()
-                .show(context: context, text: 'Loading ....');
-          } else {
-            LoadingScreen.instance().hide();
-          }
+      home: ReactionBuilder(
+        builder: (context) { 
+          return autorun((_) {
+            final isLoading = context.read<AppState>().isLoading;
+            if (isLoading) {
+              LoadingScreen.instance()
+                  .show(context: context, text: 'Loading ....');
+            } else {
+              LoadingScreen.instance().hide();
+            }
 
-          final authError = context.read<AppState>().authError;
-          if (authError != null) {
-            showAuthErrorDialog(context: context, authError: authError);
-          }
-        });
-      }, child: Observer(builder: (context) {
-        switch (context.read<AppState>().currentScreen) {
-          case AppScreen.loginScreen:
-            return const LoginView();
-          case AppScreen.registerScreen:
-            return const RegisterView();
-          case AppScreen.reminderScreen:
-            return const RemindersView();
-        }
-      })),
+            final authError = context.read<AppState>().authError;
+            if (authError != null) {
+              showAuthErrorDialog(context: context, authError: authError);
+            }
+          });
+        },
+        child: Observer(
+          builder: (context) {
+            switch (context.read<AppState>().currentScreen) {
+              case AppScreen.loginScreen:
+                return const LoginView();
+              case AppScreen.registerScreen:
+                return const RegisterView();
+              case AppScreen.reminderScreen:
+                return const RemindersView();
+            }
+          },
+        ),
+      ),
     );
   }
 }

@@ -7,7 +7,7 @@ class Reminder = _Reminder with _$Reminder;
 abstract class _Reminder with Store {
   final String id;
   final DateTime creationDate;
-  bool isDone;
+  bool isDone; 
   String text;
 
   _Reminder({
